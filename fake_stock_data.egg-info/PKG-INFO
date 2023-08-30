@@ -1,0 +1,7 @@
+Metadata-Version: 2.1
+Name: fake-stock-data
+Version: 0.1
+Summary: Modules with functions designed to create fake stock dataset
+Author: Beka Japaridze
+Author-email: b.japaridze@andersenlab.com
+License: Andersen
