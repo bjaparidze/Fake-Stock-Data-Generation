@@ -13,7 +13,7 @@ def calculate_macd(data: pd.DataFrame, close_price_col: str):
     # Calculate the MACD line
     data["MACD"] = data["EMA12"] - data["EMA26"]
 
-    data.drop(["EMA12", "EMA26"], axis=1)
+    data.drop(["EMA12", "EMA26"], axis=1, inplace=True)
 
     # Calculate the MACD single line (9-period EMA of the MACD)
     data["Signal_Line"] = data["MACD"].ewm(span=9, adjust=False).mean()

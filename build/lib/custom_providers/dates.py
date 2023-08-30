@@ -21,7 +21,7 @@ class Dates(BaseProvider):
         """
         Generates fake sequential dates that repeat over the specified time period.
         ex.: generates 90 dates that increase by 1 day and repeats them until specified number of rows is reached in a dataframe.
-        returns a pandas dataframe object.
+        returns a pandas dataframe.
         """
         fake = Faker()
         # Initial date
