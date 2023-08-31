@@ -23,14 +23,14 @@ def add_missing_values(missing_prob, collection):
             collection[idx] = -9999
 
 
-def add_missing_values_to_df(df: pd.DataFrame, **kwargs):
+def add_missing_values_to_df(df: pd.DataFrame, **missing_prob_dict):
     """
     Adds missing values to a given pandas dataframe.
     User has to pass a dictionary with column names as keys and probability of missing values as values.
     """
     num_rows = len(df)
 
-    for column, missing_prob in kwargs.items():
+    for column, missing_prob in missing_prob_dict.items():
         missing_indices = np.random.choice(
             num_rows, size=int(missing_prob * num_rows), replace=False
         )
