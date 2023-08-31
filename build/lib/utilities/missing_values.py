@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 
 def add_missing_values(missing_prob, collection):
@@ -20,3 +21,21 @@ def add_missing_values(missing_prob, collection):
             collection[idx] = np.nan
         except ValueError:
             collection[idx] = -9999
+
+
+def add_missing_values_to_df(df: pd.DataFrame, **kwargs):
+    """
+    Adds missing values to a given pandas dataframe.
+    User has to pass a dictionary with column names as keys and probability of missing values as values.
+    """
+    num_rows = len(df)
+
+    for column, missing_prob in kwargs.items():
+        missing_indices = np.random.choice(
+            num_rows, size=int(missing_prob * num_rows), replace=False
+        )
+        # missing_indices = tuple(missing_indices)
+        try:
+            df.loc[missing_indices, column] = np.nan
+        except ValueError:
+            df.loc[missing_indices, column] = -9999
