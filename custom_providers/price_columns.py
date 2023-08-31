@@ -9,7 +9,7 @@ class PriceColumns(BaseProvider):
     Custom provider of price and volume values for python's faker library
     """
 
-    def generate_prices(self, num_rows: int, price_range: tuple, **kwargs) -> pd.DataFrame:
+    def generate_prices(self, num_rows: int, price_range: tuple, **missing_prob_dict) -> pd.DataFrame:
         """
         Generates Open, Close, High and Low Prices and Volume columns.
         To generate missing values, pass a dictionary as a parameter with column names as keys and probabilities as values.
@@ -47,7 +47,7 @@ class PriceColumns(BaseProvider):
         }
 
         # Add missing values
-        for column, missing_prob in kwargs.items():
+        for column, missing_prob in missing_prob_dict.items():
             add_missing_values(missing_prob, data[column])
 
         dataframe = pd.DataFrame(data)
