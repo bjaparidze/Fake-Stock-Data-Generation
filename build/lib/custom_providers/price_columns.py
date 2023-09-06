@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from faker.providers import BaseProvider
-from utilities.missing_values import add_missing_values
+from prices_with_gbm.gen_gbm_close_prices import generate_close_prices
 
 
 class PriceColumns(BaseProvider):
@@ -9,47 +9,44 @@ class PriceColumns(BaseProvider):
     Custom provider of price and volume values for python's faker library
     """
 
-    def generate_prices(self, num_rows: int, price_range: tuple, **missing_prob_dict) -> pd.DataFrame:
+    def generate_prices(
+        self, num_of_companies: int, sample_size: int, num_of_days: int
+    ) -> pd.DataFrame:
         """
-        Generates Open, Close, High and Low Prices and Volume columns.
+        Generates Open, Close, High and Low Prices and Volume columns for a given number of companies over given number of days.
         To generate missing values, pass a dictionary as a parameter with column names as keys and probabilities as values.
         Returns a pandas dataframe
         """
-        np.random.seed(42)
 
-        # Normal distribution for gradual changes
-        normal_fluctuations = np.random.normal(50, 10, num_rows)
-        # Uniform distribution for occasional jumps
-        uniform_jumps = np.random.uniform(-100, 100, num_rows)
+        close_prices = generate_close_prices(
+            num_of_companies=num_of_companies,
+            sample_size=sample_size,
+            num_of_days=num_of_days,
+        )
 
-        # Calculate cumulative sums for gradual and jump fluctuations
-        cumulative_changes = normal_fluctuations + uniform_jumps
-        cumulative_prices = price_range[0] + np.cumsum(cumulative_changes)
-        # Clip prices to stay within the range
-        clipped_prices = np.clip(cumulative_prices, price_range[0], price_range[1])
+        close_prices = np.clip(close_prices, a_min=1, a_max=1000)
 
-        # Generate distinct open and close prices
-        # Also high and low prices
-        open_prices = clipped_prices + np.random.uniform(-5, 5, num_rows)
-        close_prices = clipped_prices - np.random.uniform(-5, 5, num_rows)
-        high_prices = np.maximum(open_prices, close_prices) + np.random.uniform(0, 20)
-        low_prices = np.minimum(open_prices, close_prices) - np.random.uniform(0, 20)
+        open_prices = np.empty_like(close_prices)
+        for i in range(close_prices.shape[1]):
+            for j in range(1, close_prices.shape[0]):
+                open_prices[j, i] = close_prices[j-1, i] + np.random.normal(0, 0.5)
 
-        # Generate random volume using NumPy
-        volume = np.random.randint(10000, 1000000, num_rows)
+        # drop the first row from close_prices and open_prices arrays and flatten them
+        flattened_close_prices = close_prices[1:].flatten()
+        df = pd.DataFrame({"Close Price": flattened_close_prices})
 
-        data = {
-            "Open Price": open_prices,
-            "Close Price": close_prices,
-            "High Price": high_prices,
-            "Low Price": low_prices,
-            "Volume": volume,
-        }
+        flattened_open_prices = open_prices[1:].flatten()
+        df['Open Price'] = flattened_open_prices
 
-        # Add missing values
-        for column, missing_prob in missing_prob_dict.items():
-            add_missing_values(missing_prob, data[column])
+        low_prices = np.maximum(df['Open Price'], df['Close Price']) - np.random.uniform(0, 100, len(df))
+        low_prices = np.clip(low_prices, a_min=1, a_max=1000)
 
-        dataframe = pd.DataFrame(data)
+        high_prices = np.maximum(df['Open Price'], df['Close Price']) + np.random.uniform(0, 100, len(df))
+        high_prices = np.clip(low_prices, a_min=1, a_max=1000)
 
-        return dataframe
+        df['High Price'] = high_prices
+        df['Low Price'] = low_prices
+
+        df['Volume'] = np.random.randint(10_000, 1_000_000, len(df))
+
+        return df

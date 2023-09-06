@@ -8,5 +8,5 @@ setup(
     author='Beka Japaridze',
     author_email='b.japaridze@andersenlab.com',
     license='Andersen',
-    packages=['calculated_columns', 'custom_providers', 'utilities']
+    packages=['calculated_columns', 'custom_providers', 'prices_with_gbm', 'utilities']
 )
