@@ -162,3 +162,4 @@ cython_debug/
 __pycache__/
 build/
 .venv/
+fake_stock_data.egg-info/
