@@ -42,7 +42,7 @@ class PriceColumns(BaseProvider):
         low_prices = np.clip(low_prices, a_min=1, a_max=1000)
 
         high_prices = np.maximum(df['Open Price'], df['Close Price']) + np.random.uniform(0, 100, len(df))
-        high_prices = np.clip(low_prices, a_min=1, a_max=1000)
+        high_prices = np.clip(high_prices, a_min=1, a_max=1000)
 
         df['High Price'] = high_prices
         df['Low Price'] = low_prices
