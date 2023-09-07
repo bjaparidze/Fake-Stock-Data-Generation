@@ -160,6 +160,7 @@ cython_debug/
 #.idea/
 
 __pycache__/
+**/__pycache__/
 build/
 .venv/
 fake_stock_data.egg-info/
