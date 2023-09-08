@@ -22,12 +22,12 @@ class Sectors(BaseProvider):
         Sectors repeat 'time_period_in_days' times until desired number of rows is reached.
         Returns pandas dataframe.
         """
-        initial_num_rows = math.ceil(num_rows / time_period_in_days)
+        num_of_repeated_sectors = math.ceil(num_rows / time_period_in_days)
 
         # Define list of sectors
         sectors = ["Technology", "Finance", "Healthcare", "Energy", "Consumer Goods"]
         # Generate random sectors for each company
-        company_sectors = np.random.choice(sectors, initial_num_rows)
+        company_sectors = np.random.choice(sectors, num_of_repeated_sectors)
 
         # Duplicate company names and tickers based on time_period_in_days
         company_sectors = [

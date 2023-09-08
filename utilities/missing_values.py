@@ -34,7 +34,6 @@ def add_missing_values_to_df(df: pd.DataFrame, **missing_prob_dict):
         missing_indices = np.random.choice(
             num_rows, size=int(missing_prob * num_rows), replace=False
         )
-        # missing_indices = tuple(missing_indices)
         try:
             df.loc[missing_indices, column] = np.nan
         except ValueError:

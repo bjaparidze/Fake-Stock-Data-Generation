@@ -24,9 +24,9 @@ class NamesAndTickers(BaseProvider):
         fake = Faker()
         companies = []
         tickers = []
-        initial_num_rows = math.ceil(num_rows / time_period_in_days)
+        num_of_repeated_comps = math.ceil(num_rows / time_period_in_days)
 
-        for _ in range(initial_num_rows):
+        for _ in range(num_of_repeated_comps):
             # Generate fake company name
             company_name = fake.company()
 
