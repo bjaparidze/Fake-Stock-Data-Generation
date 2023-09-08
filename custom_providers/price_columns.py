@@ -38,10 +38,10 @@ class PriceColumns(BaseProvider):
         flattened_open_prices = open_prices[1:].flatten()
         df['Open Price'] = flattened_open_prices
 
-        low_prices = np.minimum(df['Open Price'], df['Close Price'].to_numpy()) - np.random.uniform(0, 100, len(df))
+        low_prices = np.minimum(df['Open Price'], df['Close Price']) - np.random.uniform(0, 100, len(df))
         low_prices = np.clip(low_prices, a_min=1, a_max=1100)
 
-        high_prices = np.maximum(df['Open Price'], df['Close Price'].to_numpy()) + np.random.uniform(0, 100, len(df))
+        high_prices = np.maximum(df['Open Price'], df['Close Price']) + np.random.uniform(0, 100, len(df))
         high_prices = np.clip(high_prices, a_min=1, a_max=1100)
 
         df['High Price'] = high_prices
